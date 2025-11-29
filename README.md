@@ -146,15 +146,8 @@ The ATS scoring engine checks:
 
 ---
 
-## 📬 Feedback & Suggestions
-
-If you want to improve this project:
-
-- Add export PDF output for results  
-- Add AI scoring using OpenAI API  
-- Add charts & graphs to Dashboard  
-- Add dark/light theme toggle  
-
+### Images
+![alt text](image.png)
 ---
 
 ## 👨‍💻 Author
