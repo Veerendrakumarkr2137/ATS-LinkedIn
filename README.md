@@ -147,7 +147,10 @@ The ATS scoring engine checks:
 ---
 
 ### Images
-![image alt](https://github.com/Veerendrakumarkr2137/ATS-LinkedIn/blob/main/Screenshot%202025-11-29%20192216.png)
+
+***1. LOGIN PAGE***
+![image alt](https://github.com/Veerendrakumarkr2137/ATS-LinkedIn/blob/main/Login%20page.png)
+![image alt]
 ---
 
 ## 👨‍💻 Author
