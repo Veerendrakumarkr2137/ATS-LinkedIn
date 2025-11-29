@@ -150,7 +150,16 @@ The ATS scoring engine checks:
 
 ***1. LOGIN PAGE***
 ![image alt](https://github.com/Veerendrakumarkr2137/ATS-LinkedIn/blob/main/Login%20page.png)
-![image alt]
+
+***2. HOME PAGE***
+![image alt](https://github.com/Veerendrakumarkr2137/ATS-LinkedIn/blob/main/Home_Page.png)
+
+***3. ATS RESUME SCORE PAGE***
+![image alt](https://github.com/Veerendrakumarkr2137/ATS-LinkedIn/blob/main/Resume_tool.png)
+
+***4. ATS LINKEDIN PAGE***
+![image alt](https://github.com/Veerendrakumarkr2137/ATS-LinkedIn/blob/main/Linkedin_tool.png)
+
 ---
 
 ## 👨‍💻 Author
