@@ -147,6 +147,7 @@ The ATS scoring engine checks:
 ---
 
 ### Images
+<<<<<<< HEAD
 
 ***1. LOGIN PAGE***
 ![image alt](https://github.com/Veerendrakumarkr2137/ATS-LinkedIn/blob/main/Login%20page.png)
@@ -159,6 +160,10 @@ The ATS scoring engine checks:
 
 ***4. ATS LINKEDIN PAGE***
 ![image alt](https://github.com/Veerendrakumarkr2137/ATS-LinkedIn/blob/main/Linkedin_tool.png)
+=======
+1.frontpage 
+![alt text](image.png)
+>>>>>>> c9d15b96 (first)
 
 ---
 
