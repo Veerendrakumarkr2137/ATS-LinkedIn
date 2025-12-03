@@ -1,10 +1,10 @@
 // frontend/src/api.js
 
-
+// Auto-switch API base URL
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://ats-linkedin.onrender.com" 
-    : "http://localhost:5000"; 
+    ? "https://ats-linkedin.onrender.com"
+    : "http://localhost:5000";
 
 // Send JSON data (login, register, LinkedIn analyzer)
 export const postJson = async (endpoint, data, token = null) => {
