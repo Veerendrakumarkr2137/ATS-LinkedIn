@@ -1,46 +1,52 @@
 // frontend/src/api.js
 
-// Auto-switch API base URL
+import axios from "axios";
+
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://ats-linkedin.onrender.com"
-    : "http://localhost:5000";
+    ? "https://ats-linkedin.onrender.com"   
+    : "http://localhost:5000";              
 
-// Send JSON data (login, register, LinkedIn analyzer)
-export const postJson = async (endpoint, data, token = null) => {
-  const headers = {
-    "Content-Type": "application/json",
-  };
+console.log("Using API URL:", API_BASE_URL);
 
-  if (token) headers["Authorization"] = `Bearer ${token}`;
+const api = axios.create({
+  baseURL: `${API_BASE_URL}/api`,
+  withCredentials: false,
+});
 
-  const res = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(data),
-  });
-
-  const body = await res.json();
-  return { status: res.status, body };
+export const registerUser = async (userData) => {
+  const res = await api.post("/auth/register", userData);
+  return res.data;
 };
 
-// Upload file (PDF / DOCX for ATS resume)
-export const postFile = async (endpoint, file, extraData = {}, token) => {
+export const loginUser = async (userData) => {
+  const res = await api.post("/auth/login", userData);
+  return res.data;
+};
+
+export const analyzeResume = async (file, jobTitle, token) => {
   const formData = new FormData();
   formData.append("resume", file);
+  formData.append("jobTitle", jobTitle);
 
-  Object.keys(extraData).forEach((key) => {
-    formData.append(key, extraData[key]);
+  const res = await api.post("/resume/analyze", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
   });
 
-  const res = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method: "POST",
+  return res.data;
+};
+
+export const analyzeLinkedIn = async (profileData, token) => {
+  const res = await api.post("/linkedin/analyze", profileData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    body: formData,
   });
 
-  const body = await res.json();
-  return { status: res.status, body };
+  return res.data;
 };
+
+export default api;
