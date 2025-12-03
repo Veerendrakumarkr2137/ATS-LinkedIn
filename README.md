@@ -148,6 +148,9 @@ The ATS scoring engine checks:
 
 ### Images
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 63f6215e (changes)
 
 ***1. LOGIN PAGE***
 ![image alt](https://github.com/Veerendrakumarkr2137/ATS-LinkedIn/blob/main/Login%20page.png)
