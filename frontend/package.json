@@ -2,8 +2,16 @@
   "name": "frontend",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": "24.x"
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "axios": "^1.6.0",
@@ -12,11 +20,8 @@
     "react-router-dom": "^6.20.0",
     "react-scripts": "5.0.1"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "engines": {
+    "node": "24.x"
   },
   "eslintConfig": {
     "extends": [
