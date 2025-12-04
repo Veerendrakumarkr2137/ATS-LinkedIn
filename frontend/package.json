@@ -5,6 +5,9 @@
   "dependencies": {
     "axios": "^1.4.0",
     "framer-motion": "^10.12.8",
+    "ajv": "6.12.6",
+    "ajv-keywords": "3.5.2",
+    "schema-utils": "2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.12.0",
