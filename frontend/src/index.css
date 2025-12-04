@@ -1,42 +1,16 @@
-/* src/index.css */
+/* frontend/src/index.css (you already had a nice theme; keep it) */
 :root {
   --bg: #0f0a1f;
-  --bg-soft: #18122b;
-  --card-bg: #201737;
-  --accent: #ff69b4;
-  --accent-soft: rgba(255, 105, 180, 0.2);
   --text: #fef5ff;
+  --accent: #ff69b4;
   --muted: #c6b4d6;
-  --danger: #ff6b81;
   --border: #3a2f55;
-  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.45);
-  --radius-lg: 18px;
+  --radius-lg: 12px;
 }
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Poppins",
-    "Segoe UI", sans-serif;
-  background: radial-gradient(circle at top, #301252 0, #090313 50%, #05020a 100%);
-  color: var(--text);
-  min-height: 100vh;
-}
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-#root {
-  min-height: 100vh;
-}
+body { margin:0; font-family: Inter, system-ui, Arial; background: radial-gradient(circle at top, #301252, #090313); color:var(--text); }
+.main { padding: 1.5rem; max-width: 1080px; margin: 0 auto; }
+.navbar { display:flex; justify-content:space-between; padding:1rem; background: linear-gradient(90deg,#2a163e,#3b173f,#ff69b4); }
+.card { background: rgba(0,0,0,0.28); padding:1rem; border-radius:12px; border:1px solid var(--border); margin:1rem 0; }
+.form input, .form textarea { width:100%; padding:8px; border-radius:8px; background: rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--text); }
+.btn-primary { background: linear-gradient(135deg, #ff8fcf, #ff69b4); border:none; padding:8px 12px; border-radius:999px; cursor:pointer; }
+.error-box { background: rgba(255,107,129,0.08); padding:8px; border-radius:8px; color:#ffcdd4; }

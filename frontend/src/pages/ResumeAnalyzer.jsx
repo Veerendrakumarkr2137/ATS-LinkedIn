@@ -1,151 +1,66 @@
-// src/pages/ResumeAnalyzer.jsx
+// frontend/src/pages/ResumeAnalyzer.jsx
 import React, { useState } from "react";
 import { api } from "../api";
 
 const ResumeAnalyzer = () => {
-  const [jobTitle, setJobTitle] = useState("Full Stack Developer");
   const [file, setFile] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [jobTitle, setJobTitle] = useState("");
   const [result, setResult] = useState(null);
+  const [err, setErr] = useState("");
 
-  const handleFileChange = (e) => {
-    const selected = e.target.files[0];
-    if (!selected) return;
-
-    // allow only PDF or DOCX
-    const allowedTypes = [
-      "application/pdf",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
-
-    if (!allowedTypes.includes(selected.type)) {
-      setError("Please upload a PDF or DOCX file only.");
-      setFile(null);
-      return;
-    }
-
-    setError("");
-    setFile(selected);
-  };
-
-  const handleSubmit = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    setError("");
+    setErr("");
     setResult(null);
-
-    if (!file) {
-      setError("Please choose a resume file first.");
-      return;
-    }
-
+    if (!file) return setErr("Choose a PDF or DOCX resume");
+    const fd = new FormData();
+    fd.append("resume", file);
+    fd.append("jobTitle", jobTitle);
     try {
-      setLoading(true);
-      const formData = new FormData();
-      formData.append("jobTitle", jobTitle);
-      // 👇 IMPORTANT: field name must be "resume" (matches backend upload.single("resume"))
-      formData.append("resume", file);
-
-      const res = await api.post("/api/resume/analyze", formData, {
+      const res = await api.post("/api/resume/analyze", fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
       setResult(res.data.analysis);
-    } catch (err) {
-      console.error("Resume analyze error:", err);
-      setError(
-        err?.response?.data?.message || "Resume analysis failed. Try again."
-      );
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      setErr(error?.response?.data?.message || "Analysis failed");
     }
   };
 
-  const scorePercent = result?.score ?? 0;
-
   return (
-    <div className="page fade-in">
-      <div className="page-header">
-        <h1>Resume ATS Analyzer</h1>
-        <p className="muted">
-          Upload your <strong>PDF</strong> or <strong>DOCX</strong> resume to
-          get an estimated ATS score and improvement suggestions.
-        </p>
-      </div>
-
+    <div className="page">
       <div className="card">
-        {error && <div className="error-box">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="form">
+        <h2>Resume ATS Analyzer</h2>
+        <form className="form" onSubmit={submit}>
+          <label>
+            Upload resume
+            <input type="file" accept=".pdf,.docx" onChange={(e) => setFile(e.target.files[0])} />
+          </label>
           <label>
             Target Job Title
-            <input
-              type="text"
-              value={jobTitle}
-              onChange={(e) => setJobTitle(e.target.value)}
-              placeholder="e.g. Full Stack Developer"
-              required
-            />
+            <input value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} placeholder="e.g., Full Stack Developer" />
           </label>
-
-          <label>
-            Resume File (PDF / DOCX)
-            <input type="file" accept=".pdf,.docx" onChange={handleFileChange} />
-            {file && (
-              <p className="muted small-text">
-                Selected: <strong>{file.name}</strong>
-              </p>
-            )}
-          </label>
-
-          <button className="btn-primary" type="submit" disabled={loading}>
-            {loading ? "Analyzing..." : "Analyze Resume"}
-          </button>
+          <button className="btn-primary">Analyze</button>
         </form>
-      </div>
 
-      {result && (
-        <div className="card result-card slide-up">
-          <h2>ATS Score</h2>
-          <div className="score-wrapper">
-            <div className="score-circle">
-              <span>{scorePercent}%</span>
-            </div>
-            <div className="score-details">
-              <p>
-                <strong>Job Title:</strong> {result.jobTitle || jobTitle}
-              </p>
-              {result.breakdown && (
-                <>
-                  <p>
-                    <strong>Keyword score:</strong>{" "}
-                    {result.breakdown.keywordScore}/60
-                  </p>
-                  <p>
-                    <strong>Length score:</strong>{" "}
-                    {result.breakdown.lengthScore}/25
-                  </p>
-                  <p>
-                    <strong>Structure score:</strong>{" "}
-                    {result.breakdown.structureScore}/15
-                  </p>
-                </>
-              )}
+        {err && <div className="error-box">{err}</div>}
+
+        {result && (
+          <div className="result-card card gradient-card">
+            <h3>Score: {result.score}</h3>
+            <div className="score-display">
+              <div className="score-circle">
+                <span>{result.score}</span>
+                <small>ATS</small>
+              </div>
+              <div className="score-details">
+                <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(result.breakdown, null, 2)}</pre>
+                <h4>Suggestions</h4>
+                <ul className="suggestions-list">{result.suggestions.map((s, i) => <li key={i}>{s}</li>)}</ul>
+              </div>
             </div>
           </div>
-
-          {result.suggestions && result.suggestions.length > 0 && (
-            <>
-              <h3 className="mt-24">Suggestions</h3>
-              <ul className="suggestion-list">
-                {result.suggestions.map((s, idx) => (
-                  <li key={idx}>{s}</li>
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

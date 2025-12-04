@@ -1,74 +1,39 @@
-// src/pages/Login.jsx
+// frontend/src/pages/Login.jsx
 import React, { useState } from "react";
-import { api } from "../api";
+import { api, loginUser } from "../api";
 import { useAuth } from "../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate();
   const { login } = useAuth();
-
+  const nav = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [err, setErr] = useState("");
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const change = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    setError("");
-
+    setErr("");
     try {
-      setLoading(true);
-
       const res = await api.post("/api/auth/login", form);
       login(res.data);
-
-      navigate("/");
-    } catch (err) {
-      setError(err?.response?.data?.message || "Login failed.");
-    } finally {
-      setLoading(false);
+      nav("/resume");
+    } catch (error) {
+      setErr(error?.response?.data?.message || "Login failed");
     }
   };
 
   return (
     <div className="auth-wrapper">
       <div className="card">
-        <h2>Welcome back 👋</h2>
-        {error && <div className="error-box">{error}</div>}
-        <form onSubmit={handleSubmit} className="form">
-          <label>
-            Email
-            <input
-              name="email"
-              type="email"
-              required
-              value={form.email}
-              onChange={handleChange}
-            />
-          </label>
-
-          <label>
-            Password
-            <input
-              name="password"
-              type="password"
-              required
-              value={form.password}
-              onChange={handleChange}
-            />
-          </label>
-
-          <button className="btn-primary" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
+        <h2>Login</h2>
+        {err && <div className="error-box">{err}</div>}
+        <form onSubmit={submit} className="form">
+          <label>Email<input name="email" value={form.email} onChange={change} required/></label>
+          <label>Password<input type="password" name="password" value={form.password} onChange={change} required/></label>
+          <button className="btn-primary">Login</button>
         </form>
-
-        <p className="muted small-text">
-          New here? <Link to="/register">Create an account</Link>
-        </p>
       </div>
     </div>
   );

@@ -1,52 +1,35 @@
 // frontend/src/api.js
-
 import axios from "axios";
 
-const API_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://ats-linkedin.onrender.com"   
-    : "http://localhost:5000";              
+const DEFAULT_PROD_BACKEND = "https://ats-linkedin.onrender.com";
 
-console.log("Using API URL:", API_BASE_URL);
+// Use environment variable when provided (for Vercel / Netlify)
+const API_BASE =
+  process.env.REACT_APP_API_URL ||
+  (process.env.NODE_ENV === "production" ? DEFAULT_PROD_BACKEND : "http://localhost:5000");
 
-const api = axios.create({
-  baseURL: `${API_BASE_URL}/api`,
-  withCredentials: false,
+// named axios instance
+export const api = axios.create({
+  baseURL: API_BASE,
+  headers: {
+    Accept: "application/json",
+  },
 });
 
-export const registerUser = async (userData) => {
-  const res = await api.post("/auth/register", userData);
-  return res.data;
-};
+// attach token automatically if present
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("ats_token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
-export const loginUser = async (userData) => {
-  const res = await api.post("/auth/login", userData);
-  return res.data;
-};
-
-export const analyzeResume = async (file, jobTitle, token) => {
-  const formData = new FormData();
-  formData.append("resume", file);
-  formData.append("jobTitle", jobTitle);
-
-  const res = await api.post("/resume/analyze", formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    },
+// helper functions (optional)
+export const loginUser = (payload) => api.post("/api/auth/login", payload);
+export const registerUser = (payload) => api.post("/api/auth/register", payload);
+export const analyzeResume = (formData) =>
+  api.post("/api/resume/analyze", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
   });
-
-  return res.data;
-};
-
-export const analyzeLinkedIn = async (profileData, token) => {
-  const res = await api.post("/linkedin/analyze", profileData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return res.data;
-};
+export const analyzeLinkedIn = (payload) => api.post("/api/linkedin/analyze", payload);
 
 export default api;
