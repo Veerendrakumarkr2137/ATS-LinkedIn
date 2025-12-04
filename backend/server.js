@@ -14,7 +14,7 @@ app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://your-vercel-domain.vercel.app"
+    "ats-linked-in-ta6y.vercel.app"
   ],
   credentials: true
 }));
