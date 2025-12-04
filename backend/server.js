@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "ats-linked-in-ta6y.vercel.app"
+    "https://ats-linked-in-ta6y.vercel.app"
   ],
   credentials: true
 }));
