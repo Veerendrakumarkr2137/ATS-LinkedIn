@@ -1,35 +1,24 @@
-// frontend/src/api.js
 import axios from "axios";
 
-const DEFAULT_PROD_BACKEND = "https://ats-linkedin.onrender.com";
-
-// Use environment variable when provided (for Vercel / Netlify)
-const API_BASE =
-  process.env.REACT_APP_API_URL ||
-  (process.env.NODE_ENV === "production" ? DEFAULT_PROD_BACKEND : "http://localhost:5000");
-
-// named axios instance
-export const api = axios.create({
-  baseURL: API_BASE,
-  headers: {
-    Accept: "application/json",
-  },
+const API = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || "https://ats-linkedin.onrender.com/api",
 });
 
-// attach token automatically if present
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("ats_token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
+API.interceptors.request.use((req) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user?.token) {
+    req.headers.Authorization = `Bearer ${user.token}`;
+  }
+  return req;
 });
 
-// helper functions (optional)
-export const loginUser = (payload) => api.post("/api/auth/login", payload);
-export const registerUser = (payload) => api.post("/api/auth/register", payload);
+export const loginUser = (data) => API.post("/auth/login", data);
+export const registerUser = (data) => API.post("/auth/register", data);
+
 export const analyzeResume = (formData) =>
-  api.post("/api/resume/analyze", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-export const analyzeLinkedIn = (payload) => api.post("/api/linkedin/analyze", payload);
+  API.post("/resume/analyze", formData);
 
-export default api;
+export const analyzeLinkedIn = (data) =>
+  API.post("/linkedin/analyze", data);
+
+export default API;
