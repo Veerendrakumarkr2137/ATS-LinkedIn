@@ -1,16 +1,22 @@
 import { useState } from "react";
-import API from "../api";
+import { postFile } from "../api/api";
 
 export default function ResumeAnalyzer() {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
 
-  const submit = async () => {
+  const submit = async (e) => {
+    e.preventDefault();
     const form = new FormData();
     form.append("resume", file);
+    form.append("jobTitle", "Full Stack Developer");
 
-    const res = await API.post("/api/resume/analyze", form);
-    setResult(res.data.analysis);
+    const res = await postFile(
+      "/api/resume/analyze",
+      form,
+      localStorage.getItem("token")
+    );
+    setResult(res.analysis);
   };
 
   return (

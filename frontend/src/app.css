@@ -1,28 +1,30 @@
 body {
-  font-family: Arial;
-  background: #0f172a;
+  background: #0b061f;
   color: white;
+  font-family: Arial;
 }
 
-.nav {
-  padding: 15px;
-  background: #1e293b;
+.navbar {
   display: flex;
   justify-content: space-between;
-}
-
-.nav a {
-  margin-left: 15px;
-  color: pink;
+  padding: 15px;
+  background: #ff69b4;
 }
 
 .page {
-  max-width: 500px;
-  margin: 40px auto;
+  padding: 40px;
 }
 
-input, textarea, button {
+.card {
+  width: 300px;
+  margin: auto;
+  padding: 20px;
+  background: #201737;
+  border-radius: 10px;
+}
+
+input, button {
   width: 100%;
-  margin-top: 10px;
+  margin: 8px 0;
   padding: 10px;
 }
