@@ -1,28 +1,27 @@
 import { useState } from "react";
-import { analyzeResume } from "../api/api";
+import api from "../api";
 
 export default function ResumeAnalyzer() {
   const [file, setFile] = useState(null);
-  const [jobTitle, setJobTitle] = useState("");
   const [result, setResult] = useState(null);
 
-  const submit = async () => {
-    const formData = new FormData();
-    formData.append("resume", file);
-    formData.append("jobTitle", jobTitle);
+  const submit = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("resume", file);
 
-    const res = await analyzeResume(formData);
-    setResult(res.data);
+    const res = await api.post("/api/resume/analyze", data);
+    setResult(res.data.analysis);
   };
 
   return (
     <div className="page">
-      <h2>Resume ATS Analyzer</h2>
-      <input placeholder="Target Job Title" onChange={e => setJobTitle(e.target.value)} />
-      <input type="file" onChange={e => setFile(e.target.files[0])} />
-      <button onClick={submit}>Analyze Resume</button>
-
-      {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
+      <h2>ATS Resume Analyzer</h2>
+      <form onSubmit={submit}>
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+        <button>Analyze</button>
+      </form>
+      {result && <h3>ATS Score: {result.score}</h3>}
     </div>
   );
 }

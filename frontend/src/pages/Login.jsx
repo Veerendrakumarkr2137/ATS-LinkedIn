@@ -1,22 +1,29 @@
 import { useState } from "react";
-import { loginUser } from "../api/api";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { login } = useAuth();
-  const [data, setData] = useState({});
+  const navigate = useNavigate();
 
-  const submit = async () => {
-    const res = await loginUser(data);
-    login(res.data);
+  const submit = async (e) => {
+    e.preventDefault();
+    await login(email, password);
+    navigate("/");
   };
 
   return (
-    <div className="page">
+    <form className="auth" onSubmit={submit}>
       <h2>Login</h2>
-      <input placeholder="Email" onChange={e => setData({...data, email: e.target.value})} />
-      <input type="password" placeholder="Password" onChange={e => setData({...data, password: e.target.value})} />
-      <button onClick={submit}>Login</button>
-    </div>
+      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+      <input
+        type="password"
+        placeholder="Password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button>Login</button>
+    </form>
   );
 }
