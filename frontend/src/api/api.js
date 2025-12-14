@@ -1,24 +1,26 @@
 import axios from "axios";
 
-const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "https://ats-linkedin.onrender.com/api",
+const api = axios.create({
+  baseURL: "https://ats-linkedin.onrender.com/api",
 });
 
-API.interceptors.request.use((req) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (user?.token) {
-    req.headers.Authorization = `Bearer ${user.token}`;
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-  return req;
+  return config;
 });
 
-export const loginUser = (data) => API.post("/auth/login", data);
-export const registerUser = (data) => API.post("/auth/register", data);
+export const loginUser = (data) => api.post("/auth/login", data);
+export const registerUser = (data) => api.post("/auth/register", data);
 
 export const analyzeResume = (formData) =>
-  API.post("/resume/analyze", formData);
+  api.post("/resume/analyze", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 
 export const analyzeLinkedIn = (data) =>
-  API.post("/linkedin/analyze", data);
+  api.post("/linkedin/analyze", data);
 
-export default API;
+export default api;

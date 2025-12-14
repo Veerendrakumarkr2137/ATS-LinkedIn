@@ -1,54 +1,28 @@
-// frontend/src/pages/LinkedInAnalyzer.jsx
-import React, { useState } from "react";
-import { api } from "../api";
+import { useState } from "react";
+import { analyzeLinkedIn } from "../api/api";
 
-const LinkedInAnalyzer = () => {
-  const [headline, setHeadline] = useState("");
-  const [about, setAbout] = useState("");
-  const [skills, setSkills] = useState("");
+export default function LinkedInAnalyzer() {
+  const [form, setForm] = useState({});
   const [result, setResult] = useState(null);
-  const [err, setErr] = useState("");
 
-  const submit = async (e) => {
-    e.preventDefault();
-    setErr("");
-    try {
-      const res = await api.post("/api/linkedin/analyze", {
-        headline,
-        about,
-        skills: skills.split(",").map((s) => s.trim()),
-        experienceText: "",
-      });
-      setResult(res.data.analysis);
-    } catch (error) {
-      setErr(error?.response?.data?.message || "Analyze failed");
-    }
+  const submit = async () => {
+    const res = await analyzeLinkedIn(form);
+    setResult(res.data);
   };
 
   return (
     <div className="page">
-      <div className="card">
-        <h2>LinkedIn Analyzer</h2>
-        <form className="form" onSubmit={submit}>
-          <label>Headline<input value={headline} onChange={(e) => setHeadline(e.target.value)} /></label>
-          <label>About<textarea value={about} onChange={(e) => setAbout(e.target.value)} /></label>
-          <label>Skills (comma separated)<input value={skills} onChange={(e) => setSkills(e.target.value)} /></label>
-          <button className="btn-primary">Analyze</button>
-        </form>
+      <h2>LinkedIn Analyzer</h2>
 
-        {err && <div className="error-box">{err}</div>}
+      <input placeholder="Target Role" onChange={e => setForm({...form, targetRole: e.target.value})} />
+      <textarea placeholder="Headline" onChange={e => setForm({...form, headline: e.target.value})} />
+      <textarea placeholder="Skills" onChange={e => setForm({...form, skills: e.target.value})} />
+      <textarea placeholder="About" onChange={e => setForm({...form, about: e.target.value})} />
+      <textarea placeholder="Experience" onChange={e => setForm({...form, experienceText: e.target.value})} />
 
-        {result && (
-          <div className="card result-card">
-            <h3>Score: {result.score}</h3>
-            <pre>{JSON.stringify(result.breakdown, null, 2)}</pre>
-            <h4>Suggestions</h4>
-            <ul>{result.suggestions.map((s, i) => <li key={i}>{s}</li>)}</ul>
-          </div>
-        )}
-      </div>
+      <button onClick={submit}>Analyze LinkedIn</button>
+
+      {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
     </div>
   );
-};
-
-export default LinkedInAnalyzer;
+}

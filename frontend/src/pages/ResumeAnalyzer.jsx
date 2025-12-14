@@ -1,45 +1,28 @@
 import { useState } from "react";
 import { analyzeResume } from "../api/api";
 
-const ResumeAnalyzer = () => {
+export default function ResumeAnalyzer() {
   const [file, setFile] = useState(null);
   const [jobTitle, setJobTitle] = useState("");
   const [result, setResult] = useState(null);
 
   const submit = async () => {
-    const fd = new FormData();
-    fd.append("resume", file);
-    fd.append("jobTitle", jobTitle);
+    const formData = new FormData();
+    formData.append("resume", file);
+    formData.append("jobTitle", jobTitle);
 
-    const { data } = await analyzeResume(fd);
-    setResult(data.analysis);
+    const res = await analyzeResume(formData);
+    setResult(res.data);
   };
 
   return (
-    <div className="card">
+    <div className="page">
       <h2>Resume ATS Analyzer</h2>
-
-      <input
-        placeholder="Target Job Title"
-        onChange={(e) => setJobTitle(e.target.value)}
-      />
-
-      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-
+      <input placeholder="Target Job Title" onChange={e => setJobTitle(e.target.value)} />
+      <input type="file" onChange={e => setFile(e.target.files[0])} />
       <button onClick={submit}>Analyze Resume</button>
 
-      {result && (
-        <div>
-          <h3>ATS Score: {result.score}%</h3>
-          <ul>
-            {result.suggestions.map((s, i) => (
-              <li key={i}>{s}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
     </div>
   );
-};
-
-export default ResumeAnalyzer;
+}
