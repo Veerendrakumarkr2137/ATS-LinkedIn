@@ -1,26 +1,23 @@
 import { useState } from "react";
-import api from "../api";
+import API from "../api";
 
 export default function ResumeAnalyzer() {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
 
-  const submit = async (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.append("resume", file);
+  const submit = async () => {
+    const form = new FormData();
+    form.append("resume", file);
 
-    const res = await api.post("/api/resume/analyze", data);
+    const res = await API.post("/api/resume/analyze", form);
     setResult(res.data.analysis);
   };
 
   return (
     <div className="page">
-      <h2>ATS Resume Analyzer</h2>
-      <form onSubmit={submit}>
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <button>Analyze</button>
-      </form>
+      <h2>Resume Analyzer</h2>
+      <input type="file" onChange={e => setFile(e.target.files[0])} />
+      <button onClick={submit}>Analyze</button>
       {result && <h3>ATS Score: {result.score}</h3>}
     </div>
   );

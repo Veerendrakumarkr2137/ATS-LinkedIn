@@ -1,20 +1,15 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://ats-linkedin.onrender.com"
-    : "http://localhost:5000";
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
+const API = axios.create({
+  baseURL: "https://ats-linkedin.onrender.com"
 });
 
-api.interceptors.request.use((config) => {
+API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    req.headers.Authorization = `Bearer ${token}`;
   }
-  return config;
+  return req;
 });
 
-export default api;
+export default API;

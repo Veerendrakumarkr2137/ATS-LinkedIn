@@ -1,23 +1,27 @@
 import { useState } from "react";
-import api from "../api";
+import API from "../api";
 
 export default function LinkedInAnalyzer() {
-  const [text, setText] = useState("");
-  const [score, setScore] = useState(null);
+  const [headline, setHeadline] = useState("");
+  const [about, setAbout] = useState("");
+  const [result, setResult] = useState(null);
 
   const submit = async () => {
-    const res = await api.post("/api/linkedin/analyze", {
-      headline: text,
+    const res = await API.post("/api/linkedin/analyze", {
+      headline,
+      about,
+      skills: []
     });
-    setScore(res.data.analysis.score);
+    setResult(res.data.analysis);
   };
 
   return (
     <div className="page">
       <h2>LinkedIn Analyzer</h2>
-      <textarea onChange={(e) => setText(e.target.value)} />
+      <input placeholder="Headline" onChange={e => setHeadline(e.target.value)} />
+      <textarea placeholder="About" onChange={e => setAbout(e.target.value)} />
       <button onClick={submit}>Analyze</button>
-      {score && <h3>Score: {score}</h3>}
+      {result && <h3>Score: {result.score}</h3>}
     </div>
   );
 }
